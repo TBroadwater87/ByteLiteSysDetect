@@ -31,3 +31,4 @@ void RunSystemDetectionTest();
 } // namespace ByteLiteSysDetect
 
 #endif // BYTELITESYSDETECT_H
+

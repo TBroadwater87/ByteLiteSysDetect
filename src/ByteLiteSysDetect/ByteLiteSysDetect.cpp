@@ -1,13 +1,16 @@
-#include "ByteLite/ByteLiteSysDetect.h"
+#include "ByteLiteSysDetect.h"
 
 #include <iostream>
 #include <thread>
 #include <vector>
 #include <cstring>
 #include <chrono>
+
 #ifdef _WIN32
+#define NOMINMAX
 #include <windows.h>
 #include <intrin.h>
+#include <VersionHelpers.h>
 #include <dxgi1_4.h>
 #pragma comment(lib, "dxgi.lib")
 #else
@@ -17,6 +20,7 @@
 #endif
 
 namespace ByteLiteSysDetect {
+
 namespace {
 
 std::string GetCPUName() {
@@ -204,26 +208,26 @@ bool Is64Bit() {
 
 } // namespace
 
-SystemProfile DetectSystem() {
-    SystemProfile profile{};
+SystemInfo DetectSystem() {
+    SystemInfo profile{};
     profile.cpuName = GetCPUName();
     profile.logicalThreads = GetLogicalThreads();
     profile.physicalCores = GetPhysicalCores();
-    profile.ramMB = GetRAMMB();
+    profile.totalRAMBytes = GetRAMMB() * 1024 * 1024; // convert MB to bytes
     GetOSInfo(profile.osName, profile.osVersion);
     GetSIMDFlags(profile.hasMMX, profile.hasSSE, profile.hasAVX, profile.hasAVX2, profile.hasAVX512);
-    profile.fastestDrive = GetFastestDrive(profile.driveWriteMBps);
+    profile.fastestDrive = GetFastestDrive(profile.driveWriteMBps).empty() ? 'C' : GetFastestDrive(profile.driveWriteMBps)[0];
     profile.gpuName = GetGPUName();
-    profile.is64bit = Is64Bit();
+    profile.is64Bit = Is64Bit();
     return profile;
 }
 
-void RunSystemDetectionTest() {
-    SystemProfile p = DetectSystem();
+void RunByteLiteSysDetectTest() {
+    SystemInfo p = DetectSystem();
     std::cout << "CPU: " << p.cpuName << '\n';
     std::cout << "Physical Cores: " << p.physicalCores << '\n';
     std::cout << "Logical Threads: " << p.logicalThreads << '\n';
-    std::cout << "RAM MB: " << p.ramMB << '\n';
+    std::cout << "RAM (Bytes): " << p.totalRAMBytes << '\n';
     std::cout << "OS: " << p.osName << ' ' << p.osVersion << '\n';
     std::cout << "MMX: " << (p.hasMMX ? "1" : "0") << '\n';
     std::cout << "SSE: " << (p.hasSSE ? "1" : "0") << '\n';
@@ -232,7 +236,7 @@ void RunSystemDetectionTest() {
     std::cout << "AVX-512: " << (p.hasAVX512 ? "1" : "0") << '\n';
     std::cout << "Fastest Drive: " << p.fastestDrive << " (" << p.driveWriteMBps << " MB/s)" << '\n';
     std::cout << "GPU: " << p.gpuName << '\n';
-    std::cout << "64-bit: " << (p.is64bit ? "1" : "0") << '\n';
+    std::cout << "64-bit: " << (p.is64Bit ? "1" : "0") << '\n';
 }
 
 } // namespace ByteLiteSysDetect
