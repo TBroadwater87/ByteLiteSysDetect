@@ -6,29 +6,27 @@
 
 namespace ByteLiteSysDetect {
 
-struct SystemInfo {
+struct SystemProfile {
     std::string cpuName;
-    int coreCount;
-    bool hasSSE2;
-    bool hasAVX2;
-    std::uint64_t totalRAMBytes;
     int physicalCores;
     int logicalThreads;
+    std::uint64_t ramMB;
     std::string osName;
     std::string osVersion;
     bool hasMMX;
     bool hasSSE;
     bool hasAVX;
+    bool hasAVX2;
     bool hasAVX512;
-    char fastestDrive;
+    std::string fastestDrive;
     double driveWriteMBps;
     std::string gpuName;
-    bool is64Bit;
+    bool is64bit;
 };
 
-SystemInfo DetectSystem();
+SystemProfile DetectSystem();
 
-void RunByteLiteSysDetectTest();
+void RunSystemDetectionTest();
 
 } // namespace ByteLiteSysDetect
 
