@@ -4,6 +4,7 @@
 #include <thread>
 #include <cstring>
 #include <vector>
+
 #ifdef _WIN32
 #include <windows.h>
 #include <intrin.h>
@@ -313,4 +314,3 @@ void RunByteLiteSysDetectTest() {
 }
 
 } // namespace ByteLiteSysDetect
-
