@@ -212,6 +212,7 @@ SystemInfo DetectSystem() {
     SystemInfo profile{};
     profile.cpuName = GetCPUName();
     profile.logicalThreads = GetLogicalThreads();
+    profile.coreCount = profile.logicalThreads;
     profile.physicalCores = GetPhysicalCores();
     profile.totalRAMBytes = GetRAMMB() * 1024 * 1024; // convert MB to bytes
     GetOSInfo(profile.osName, profile.osVersion);
