@@ -26,8 +26,8 @@ It gathers extended system information, including:
 
 This library exposes:
 
-- A `SystemProfile` struct containing all collected metrics
-- A `RunSystemDetectionTest()` diagnostic function that prints a clean, ASCII-only report for logging/debugging
+- A `SystemInfo` struct containing all collected metrics
+- A `RunByteLiteSysDetectTest()` diagnostic function that prints a clean, ASCII-only report for logging/debugging
 
 ### Build Info
 
